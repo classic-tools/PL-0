@@ -79,15 +79,20 @@ procedure getsym;
     cc := cc + 1; ch := line[cc]
   end {getch};
 
+  function upcase(ch: char): char;
+  begin
+    if ch in ['a'..'z'] then upcase := chr((ord(ch) - ord('a')) + ord('A')) else upcase := ch 
+  end {upcase};
+
 begin {getsym}
-  while ch = ' ' do getch;
-  if ch in ['A'..'Z'] then
+  while ch in [' ', chr(9)] do getch;
+  if ch in ['A'..'Z', 'a'..'z'] then
   begin {identifier or reserved word} k := 0;
     repeat if k < al then
-           begin k := k + 1; a[k] := ch
+           begin k := k + 1; a[k] := upcase(ch)
            end;
       getch
-    until not (ch in ['A'..'Z', '0'..'9']);
+    until not (ch in ['A'..'Z', 'a'..'z', '0'..'9']);
     if k >= kk then kk := k else
       repeat a[kk] := ' '; kk := kk - 1
       until kk = k;
@@ -110,6 +115,18 @@ begin {getsym}
     if ch = '=' then
     begin sym := becomes; getch
     end else sym := nul
+  end else
+  if ch = '<' then 
+  begin getch;
+    if ch = '=' then
+    begin sym := leq; getch
+    end else sym := lss
+  end else
+  if ch = '>' then
+  begin getch;
+    if ch = '=' then 
+    begin sym := geq; getch
+    end else sym := gtr
   end else
   begin sym := ssym[ch]; getch
   end
@@ -454,8 +471,6 @@ begin {main program}
   ssym['('] := lparen;    ssym[')'] := rparen;
   ssym['='] := eql;       ssym[','] := comma;
   ssym['.'] := period;    ssym['#'] := neq;
-  ssym['<'] := lss;       ssym['>'] := gtr;
-  ssym['['] := leq;       ssym[']'] := geq;
   ssym[';'] := semicolon;
   mnemonic[lit] := ' LIT '; mnemonic[opr] := ' OPR ';
   mnemonic[lod] := ' LOD '; mnemonic[sto] := ' STO ';

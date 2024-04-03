@@ -26,7 +26,7 @@ statement  = [ ident ":=" expression | "CALL" ident |
              "IF" condition "THEN" statement |
              "WHILE" condition "DO" statement ] .
 condition  = "ODD" expression |
-             expression ( "=" | "#" | "<" | "[" | ">" | "]" ) expression .
+             expression ( "=" | "#" | "<" | "<=" | ">" | ">=" ) expression .
 expression = [ "+" | "-" ] term { ( "+" | "-" ) term } .
 term       = factor { ( "*" | "/" ) factor } .
 factor     = ident | number | "(" expression ")" .
@@ -35,17 +35,20 @@ factor     = ident | number | "(" expression ")" .
 |PL/0 language changes|Changes from CDC Pascal to ISO Pascal                              |
 |---------------------|-------------------------------------------------------------------|
 |&ne; replaced with # |&not; replaced with **not**                                        |
-|&le; replaced with [ |&uparrow; replaced with ^                                          |
-|&ge; replaced with ] |&ne; replaced with <>                                              |
+|&le; replaced with <=|&uparrow; replaced with ^                                          |
+|&ge; replaced with >=|&ne; replaced with <>                                              |
 |                     |&le; replaced with <=                                              |
 |                     |&ge; replaced with >=                                              |
 |                     |Constant *nmax* changed from 14 to 9                               |
 |                     |"procedure" enumeration item was renamed to "prozedure"            |
 |                     |Unneeded semicolons deleted                                        |
+|                     |tab character allowed in source code (ignored)                     |
+|                     |Lowercase letters allowed in source code (converted to uppercase)  |
+|                     |Code to recognize <, <=, >, and >= added                           |
 |                     |Unneeded begin-end pair deleted                                    |
 |                     |*ssym* array initialization changed from CDC character set to ASCII|
 |                     |*ssym*['&ne;'] replaced with *ssym*['#']                           |
-|                     |*ssym*['&le;'] replaced with *ssym*['[']                           |
-|                     |*ssym*['&ge;'] replaced with *ssym*[']']                           |
+|                     |*ssym*['<'] and *ssym*['>'] initializations removed                |
+|                     |*ssym*['&le;'] and *ssym*['&ge;'] initializations removed          |
 |                     |Unneeded page(output) deleted                                      |
 |                     |Missing semicolon added                                            |

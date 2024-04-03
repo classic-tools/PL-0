@@ -14,7 +14,8 @@ type symbol =
   (nul, ident, number, plus, minus, times, slash, oddsym,
    eql, neq, lss, leq, gtr, geq, lparen, rparen, comma, semicolon,
    period, becomes, beginsym, endsym, ifsym, thensym,
-   whilesym, dosym, callsym, constsym, varsym, procsym);
+   whilesym, dosym, callsym, constsym, varsym, procsym,
+   readsym, writesym);
   alfa = packed array [1..al] of char;
   object = (constant, variable, prozedure);
   symset = set of symbol;
@@ -57,6 +58,7 @@ var ch: char;        {last character read}
              constant: (val: integer);
              variable, prozedure: (level, adr: integer)
          end;
+  outflag: integer;
 
 procedure error(n: integer);
 begin writeln(' ****', ' ': cc - 1, '^', n: 2); err := err + 1
@@ -78,6 +80,15 @@ procedure getsym;
         end;
     cc := cc + 1; ch := line[cc]
   end {getch};
+
+  procedure comment;
+  begin getch;
+    repeat
+      while ch <> '*' do getch;
+      getch
+    until ch = ')';
+    getch
+  end {comment};
 
   function upcase(ch: char): char;
   begin
@@ -127,6 +138,12 @@ begin {getsym}
     if ch = '=' then 
     begin sym := geq; getch
     end else sym := gtr
+  end else
+  if ch = '(' then
+  begin getch;
+    if ch = '*' then
+    begin comment; getsym
+    end else sym := lparen
   end else
   begin sym := ssym[ch]; getch
   end
@@ -333,6 +350,23 @@ procedure block(lev, tx: integer; fsys: symset);
       cx2 := cx; gen(jpc, 0, 0);
       if sym = dosym then getsym else error(18);
       statement(fsys); gen(jmp, 0, cx1); code[cx2].a := cx
+    end else
+    if sym = readsym then
+    begin getsym;
+      if sym <> ident then error(14) else
+      begin i := position(id);
+        if i = 0 then error(11) else
+        if table[i].kind <> variable then
+        begin {read to non-variable} error(12); i := 0
+        end;
+        expression(fsys);
+        if i <> 0 then begin gen(opr, 0, 14);
+          with table[i] do gen(sto, lev - level, adr)
+        end
+      end
+    end else
+    if sym = writesym then begin
+      getsym; expression(fsys); gen(opr, 0, 15); outflag := outflag + 1
     end;
     test(fsys, [], 19)
   end {statement};
@@ -434,10 +468,14 @@ begin writeln(' START PL/0');
                  end;
              13: begin t := t - 1; s[t] := ord(s[t] <= s[t + 1])
                  end;
+             14: begin t := t + 1; readln(s[t])
+                 end;
+             15: begin writeln(s[t]); t := t - 1; 
+                 end
            end;
       lod: begin t := t + 1; s[t] := s[base(l) + a]
            end;
-      sto: begin s[base(l) + a] := s[t]; writeln(s[t]); t := t - 1
+      sto: begin s[base(l) + a] := s[t]; if outflag = 0 then writeln(s[t]); t := t - 1
            end;
       cal: begin {generate new block mark}
              s[t + 1] := base(l); s[t + 2] := b; s[t + 3] := p;
@@ -466,12 +504,12 @@ begin {main program}
   wsym[ 7] := oddsym;     wsym[ 8] := procsym;
   wsym[ 9] := thensym;    wsym[10] := varsym;
   wsym[11] := whilesym;
+  ssym['?'] := readsym;   ssym['!'] := writesym;
   ssym['+'] := plus;      ssym['-'] := minus;
   ssym['*'] := times;     ssym['/'] := slash;
-  ssym['('] := lparen;    ssym[')'] := rparen;
   ssym['='] := eql;       ssym[','] := comma;
   ssym['.'] := period;    ssym['#'] := neq;
-  ssym[';'] := semicolon;
+  ssym[';'] := semicolon; ssym[')'] := rparen;
   mnemonic[lit] := ' LIT '; mnemonic[opr] := ' OPR ';
   mnemonic[lod] := ' LOD '; mnemonic[sto] := ' STO ';
   mnemonic[cal] := ' CAL '; mnemonic[int] := ' INT ';
@@ -479,7 +517,7 @@ begin {main program}
   declbegsys := [constsym, varsym, procsym];
   statbegsys := [beginsym, callsym, ifsym, whilesym];
   facbegsys := [ident, number, lparen];
-  err := 0;
+  err := 0; outflag := 0;
   cc := 0; cx := 0; ll := 0; ch := ' '; kk := al; getsym;
   block(0, 0, [period] + declbegsys + statbegsys);
   if sym <> period then error(9);

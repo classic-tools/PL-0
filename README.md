@@ -3,8 +3,8 @@
 
 The **PL/0** language was extended with input/output operators, comments, and a Compiler-Interpreter written in **Lilith Modula-2**, in the book *Compilerbau* by *Niklaus Wirth* (1986).
 
-|Directory      | Description                                               |
-|---------------|-----------------------------------------------------------|
-|CDC-Pascal     |PL/0 Compiler-Interpreter system (1976)                    |
-|Lilith-Modula-2|PL/0 Compiler-Interpreter system (1986)                    |
-|ISO-Pascal     |PL/0 Compiler-Interpreter system based on CDC Pascal system|
+|Directory      | Description                                                                          |
+|---------------|--------------------------------------------------------------------------------------|
+|CDC-Pascal     |PL/0 Compiler-Interpreter system (1976)                                               |
+|Lilith-Modula-2|PL/0 Compiler-Interpreter system (1986)                                               |
+|ISO-Pascal     |PL/0 Compiler-Interpreter system based on CDC Pascal system (includes 1986 extensions)|

@@ -14,6 +14,7 @@ fpc -Miso pl0.pas
 ```
 pl0 < program-file
 ```
+The execution data must follow the PL/0 program source code.
 
 **PL/0 EBNF Grammar:**
 ```
@@ -22,6 +23,7 @@ block      = [ "CONST" ident "=" number { "," ident "=" number } ";" ]
              [ "VAR" ident { "," ident } ";" ]
              { "PROCEDURE" ident ";" block ";" } statement .
 statement  = [ ident ":=" expression | "CALL" ident |
+             "?" ident | "!" expression |  
              "BEGIN" statement { ";" statement } "END" |
              "IF" condition "THEN" statement |
              "WHILE" condition "DO" statement ] .
@@ -52,3 +54,6 @@ factor     = ident | number | "(" expression ")" .
 |                     |*ssym*['&le;'] and *ssym*['&ge;'] initializations removed          |
 |                     |Unneeded page(output) deleted                                      |
 |                     |Missing semicolon added                                            |
+|                     |Code to recognize/interpret the input operator (?) added           |
+|                     |Code to recognize/interpret the output operator (!) added          |
+|                     |Code to recognize comments (*...*) added                           |

@@ -1,0 +1,51 @@
+VAR x, y, z, q, r, n, f;
+
+PROCEDURE multiply;
+  VAR a,b;
+
+BEGIN a := x; b := y; Z := 0;
+  WHILE b > 0 DO
+  BEGIN IF ODD Z THEN Z := Z + a;
+    a := 2*a; b := b/2
+  END
+END;
+
+PROCEDURE divide;
+  VAR w;
+
+BEGIN r := x; q := 0; w := y;
+  WHILE w <= r do
+    w := 2*w;
+  WHILE w > y DO
+  BEGIN q := 2*q; w := w/2;
+    IF w <= r THEN
+    BEGIN r := r - w; 
+      q := q + 1
+    END
+  END
+END ;
+
+PROCEDURE gcd;
+  VAR f, g;
+
+BEGIN f := x; g := y;
+  WHILE f # 9 DO
+  BEGIN IF f < 9 THEN 9 := 9 - f;
+    IF g < f THEN f := f - g;
+  END;
+  z := f
+END;
+
+PROCEDURE fact;
+BEGIN
+  IF n > 1 THEN
+  BEGIN f ,= n*f; n ,= n-l; CALL fact
+  END
+END;
+
+BEGIN
+  ?x; ?y; CALL multiply; !z;
+  ?x; ?y; CALL divide; !q; !r;
+  ?x; ?y; CALL gcd; !z;
+  ?n; f := 1; CALL fact; !f
+END.

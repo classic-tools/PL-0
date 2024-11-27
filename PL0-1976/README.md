@@ -4,3 +4,4 @@
 |Directory         | Description                                       |
 |------------------|---------------------------------------------------|
 |Book              |PL/0 Compiler-Interpreter system (1976)            |
+|CDC-Pascal        |CDC-Pascal PL/0 Compiler-Interpreter system        |

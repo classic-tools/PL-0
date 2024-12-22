@@ -20,7 +20,7 @@ IMPLEMENTATION MODULE PL0Generator;
     IF L >= maxadr THEN HALT END;
     WITH code[L] DO
       f := x; l := y; a := z
-    END;
+    END ;
     WriteCard(win, L, 4);
     WriteString(win, mnemonic[x]);
     WriteCard(win, y, 3); WriteCard(win, z, 6); WriteLn(win);

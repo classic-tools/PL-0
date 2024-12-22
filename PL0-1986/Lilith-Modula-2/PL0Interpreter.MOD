@@ -15,7 +15,7 @@ IMPLEMENTATION MODULE PL0Interpreter;
   BEGIN b1 := b;  (*find base address, l levels down*)
     WHILE l > 0 DO
       b1 := s[b1]; l := l - 1
-    END;
+    END ;
     RETURN b1
   END base;
 
@@ -34,7 +34,7 @@ IMPLEMENTATION MODULE PL0Interpreter;
                4: t := t - 1; s[t] := s[t] * s[t + 1] |
                5: t := t - 1; s[t] := s[t] DIV s[t + 1] |
                6: s[t] := ORD(ODD(s[t])) |
-               7 : |
+               7: |
                8: t := t - 1; s[t] := ORD(s[t] = s[t + 1])  |
                9: t := t - 1; s[t] := ORD(s[t] # s[t + 1])  |
               10: t := t - 1; s[t] := ORD(s[t] < s[t + 1])  |

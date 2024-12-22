@@ -2,7 +2,7 @@ IMPLEMENTATION MODULE PL0Parser;
   FROM SYSTEM IMPORT TSIZE;
   FROM Heap IMPORT ALLOCATE, ResetHeap;
   FROM TextWindows IMPORT Window, OpenTextWindow, Write,
-       WriteLn, WriteCard, WriteString, Invert, CloseTextWindow;
+    WriteLn, WriteCard, WriteString, Invert, CloseTextWindow;
   FROM PL0Scanner IMPORT
        Symbol, sym, id, num, Diff, KeepId, GetSym, Mark;
   FROM PL0Generator IMPORT Label, Gen, fixup;
@@ -17,7 +17,7 @@ IMPLEMENTATION MODULE PL0Parser;
                     Proc:   plev, padr, size: CARDINAL |
                     Header: last, down: ObjPtr
                   END
-                END;
+                END ;
 
   VAR topScope, bottom, undef: ObjPtr;
       curlev: CARDINAL;
@@ -41,14 +41,14 @@ IMPLEMENTATION MODULE PL0Parser;
   BEGIN (*check for multiple definition*)
     obj := topScope^.next;
     WHILE obj # NIL DO
-      IF Diff(id, obj^.name) = 0 THEN err(25) END;
+      IF Diff(id, obj^.name) = 0 THEN err(25) END ;
       obj := obj^.next
-    END;
+    END ;
     (*now enter new object into list*)
     ALLOCATE(obj, TSIZE(Object));
     WITH obj^ DO
       name := id; kind := k; next := NIL
-    END;
+    END ;
     KeepId; topScope^.last^.next := obj; topScope^.last := obj;
     RETURN obj
   END NewObj;
@@ -62,7 +62,7 @@ IMPLEMENTATION MODULE PL0Parser;
         IF Diff(id, obj^.name) = 0 THEN RETURN obj
         ELSE obj := obj^.next
         END
-      END;
+      END ;
       hd := hd^.down
     END;
     err(11); RETURN undef
@@ -83,7 +83,7 @@ IMPLEMENTATION MODULE PL0Parser;
             Var:   Gen(2, curlev - vlev, vadr) |
             Proc:  err(21)
           END
-        END;
+        END ;
         GetSym
       ELSIF sym = number THEN
         Gen(0, 0, num); GetSym
@@ -111,7 +111,7 @@ IMPLEMENTATION MODULE PL0Parser;
       addop := sym; GetSym; term;
       IF addop = minus THEN Gen(1, 0, 1) END
     ELSE term
-    END;
+    END ;
     WHILE (plus <= sym) & (sym <= minus) DO
       addop := sym; GetSym; term;
       IF addop = plus THEN Gen(1, 0, 2) ELSE Gen(1, 0, 3) END
@@ -146,12 +146,12 @@ IMPLEMENTATION MODULE PL0Parser;
     test(ident, 10);
     IF sym = ident THEN
       obj := find(id);
-      IF obj^.kind # Var THEN err(12); obj := NIL END;
+      IF obj^.kind # Var THEN err(12); obj := NIL END ;
       GetSym;
       IF sym = becomes THEN GetSym
       ELSIF sym = eql THEN err(13); GetSym
       ELSE err(13)
-      END;
+      END ;
       expression;
       IF obj # NIL THEN
         Gen(3, curlev - obj^.vlev, obj^.vadr) (*store*)
@@ -163,7 +163,7 @@ IMPLEMENTATION MODULE PL0Parser;
         IF obj^.kind = Proc THEN
           Gen(4, curlev - obj^.plev, obj^.padr) (*call*)
         ELSE err(15)
-        END;
+        END ;
         GetSym
       ELSE err(14)
       END
@@ -177,11 +177,11 @@ IMPLEMENTATION MODULE PL0Parser;
       END
     ELSIF sym = if THEN
       GetSym; condition;
-      IF sym = then THEN GetSym ELSE err(16) END;
+      IF sym = then THEN GetSym ELSE err(16) END ;
       L0 := Label(); Gen(7, 0, 0); statement; fixup(L0)
     ELSIF sym = while THEN L0 := Label();
       GetSym; condition; L1 := Label(); Gen(7, 0, 0);
-      IF sym = do THEN GetSym ELSE err(18) END;
+      IF sym = do THEN GetSym ELSE err(18) END ;
       statement; Gen(6, 0, L0); fixup(L1)
     ELSIF sym = read THEN
       GetSym;
@@ -192,11 +192,11 @@ IMPLEMENTATION MODULE PL0Parser;
         ELSE err(12)
         END
       ELSE err(14)
-      END;
+      END ;
       GetSym
     ELSIF sym = write THEN
       GetSym; expression; Gen(1, 0, 15)
-    END;
+    END ;
     test(ident, 19)
   END statement;
 
@@ -211,7 +211,7 @@ IMPLEMENTATION MODULE PL0Parser;
       IF sym = ident THEN
         GetSym;
         IF (sym = eql) OR (sym = becomes) THEN
-          IF sym = becomes THEN err(1) END;
+          IF sym = becomes THEN err(1) END ;
           GetSym;
           IF sym = number THEN
             obj := NewObj(Const); obj^.val := num; GetSym
@@ -239,7 +239,7 @@ IMPLEMENTATION MODULE PL0Parser;
     WITH hd^ DO
       kind := Header; next := NIL; last := hd;
       name := 0; down := topScope
-    END;
+    END ;
     topScope := hd; L0 := Label(); Gen(6, 0, 0); (*jump*)
     IF sym = const THEN GetSym;
       LOOP ConstDeclaration;
@@ -249,7 +249,7 @@ IMPLEMENTATION MODULE PL0Parser;
         ELSE err(5); EXIT
         END
       END
-    END;
+    END ;
     IF sym = var THEN GetSym;
       LOOP VarDeclaration;
         IF sym = comma THEN GetSym
@@ -258,7 +258,7 @@ IMPLEMENTATION MODULE PL0Parser;
         ELSE err(5); EXIT
         END
       END
-    END;
+    END ;
     WHILE sym = procedure DO
       GetSym;
       IF sym = ident THEN GetSym ELSE err(4) END;
@@ -267,7 +267,7 @@ IMPLEMENTATION MODULE PL0Parser;
       IF sym = semicolon THEN GetSym ELSE err(5) END;
       block;
       IF sym = semicolon THEN GetSym ELSE err(5) END
-    END;
+    END ;
     fixup(L0); Gen(5, 0, adr); (*enter*)
     statement;
     Gen(1, 0, 0); (*return*)
@@ -288,6 +288,6 @@ IMPLEMENTATION MODULE PL0Parser;
 BEGIN ALLOCATE(undef, TSIZE(Object)); ALLOCATE(bottom, 0);
   WITH undef^ DO
     name := 0; next := NIL; kind := Var; vlev := 0; vadr := 0
-  END;
+  END ;
   OpenTextWindow(win, 0, 66, 234, 508, "PARSE");
 END PL0Parser.

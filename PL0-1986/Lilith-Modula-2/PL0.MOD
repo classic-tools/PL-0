@@ -26,14 +26,14 @@ MODULE PL0;  (*NW WS 83/84*)
         IF i > 3 THEN Write(win, DEL); i := i - 1 END
       ELSIF i < NL THEN
         Write(win, ch); FileName[i] := ch; i := i + 1
-      END;
+      END ;
       Read(ch)
-    END;
+    END ;
     IF (3 < i) & (i < NL) & (FileName[i - 1] = ".") THEN
       FileName[i] := "P"; i := i + 1;
       FileName[i] := "L"; i := i + 1;
       FileName[i] := "0"; i := i + 1; WriteString(win, "PL0")
-    END;
+    END ;
     FileName[i] := 0C
   END ReadName;
 
@@ -48,9 +48,9 @@ BEGIN OpenTextWindow(win, 0, 0, 704, 66, "DIALOG");
       ELSE WriteString(win, " incorrect")
       END
     ELSE WriteString(win, " not found")
-    END;
+    END ;
     WriteLn(win)
-  END;
+  END ;
   CloseScanner; EndParser; EndGenerator; EndInterpreter;
   CloseTextWindow(win)
 END PL0.

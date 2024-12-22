@@ -18,7 +18,7 @@ DEFINITION MODULE PL0Scanner;
     (*difference between identifiers at buf[u] and buf[v]*)
   PROCEDURE KeepId;
   PROCEDURE Mark(n: CARDINAL);  (*mark error n in source text*)
-  PROCEDURE GetSym; (*get next symbol; results: sym, id, num*)
+  PROCEDURE GetSym;  (*get next symbol; results: sym, id, num*)
   PROCEDURE InitScanner;
   PROCEDURE CloseScanner;
 END PL0Scanner.

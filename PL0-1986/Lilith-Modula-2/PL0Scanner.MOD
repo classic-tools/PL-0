@@ -32,7 +32,7 @@ IMPLEMENTATION MODULE PL0Scanner;
       IF w = 0 THEN RETURN 0
       ELSIF buf[u] # buf[v] THEN
         RETURN INTEGER(buf[u]) - INTEGER(buf[v])
-      ELSE u := u + 1; v := v + 1; w := w - 1
+      ELSE u := u+1; v := v+1; w := w-1
       END
     END
   END Diff;
@@ -67,16 +67,16 @@ IMPLEMENTATION MODULE PL0Scanner;
 
   PROCEDURE Number;
     VAR i, j, k, d: CARDINAL;
-      dig: ARRAY [0 .. 31] OF CHAR;
+    dig: ARRAY [0 .. 31] OF CHAR;
   BEGIN sym := number; i := 0;
-    REPEAT dig[i] := ch; i := i + 1; GetCh
+    REPEAT dig[i] := ch; i := i+1; GetCh
     UNTIL (ch < "0") OR ("9" < ch) & (CAP(ch) < "A") OR
           ("Z" < CAP(ch));
     j := 0; k := 0;
     REPEAT d := CARDINAL(dig[j]) - 60B;
-      IF (d < 10) & ((maxCard - d) DIV 10 >= k) THEN k := 10 * k + d
+      IF (d < 10) & ((maxCard - d) DIV 10 >= k) THEN k := 10*k + d
       ELSE Mark(30); k := 0
-      END;
+      END ;
       j := j + 1
     UNTIL j = i;
     num := k
@@ -88,7 +88,7 @@ IMPLEMENTATION MODULE PL0Scanner;
     PROCEDURE Comment;
     BEGIN GetCh;
       REPEAT
-        WHILE ch # "*" DO GetCh END;
+        WHILE ch # "*" DO GetCh END ;
         GetCh
       UNTIL ch = ")";
       GetCh
@@ -96,62 +96,62 @@ IMPLEMENTATION MODULE PL0Scanner;
 
   BEGIN BusyRead(xch);
     IF xch > 0C THEN Read(xch) END;
-    LOOP  (*ignore control characters*)
+    LOOP (*ignore control characters*)
       IF ch <= " " THEN
-        IF ch = 0C THEN ch := " "; EXIT END;
+        IF ch = 0C THEN ch := " "; EXIT END ;
         GetCh
       ELSIF ch >= 177C THEN GetCh
       ELSE EXIT
       END
     END;
-    CASE ch OF  (* " " <= ch < 177C *)
-      " ": sym := eof; ch := 0C |
-      "!": sym := write; GetCh |
-      '"': sym := null; GetCh |
-      "#": sym := neq;  GetCh |
-      "$": sym := null; GetCh |
-      "%": sym := null; GetCh |
-      "&": sym := null; GetCh |
-      "'": sym := null; GetCh |
-      "(": GetCh;
-           IF ch = "*" THEN Comment; GetSym
-           ELSE sym := lparen
-           END |
-      ")": sym := rparen; GetCh|
-      "*": sym := times; GetCh |
-      "+": sym := plus; GetCh  |
-      ",": sym := comma; GetCh |
-      "-": sym := minus; GetCh |
-      ".": sym := period; GetCh |
-      "/": sym := div; GetCh |
-      "0" .. "9": Number |
-      ":": GetCh;
-           IF ch = "=" THEN GetCh; sym := becomes
-           ELSE sym := null
-           END |
-      ";": sym := semicolon; GetCh |
-      "<": GetCh;
-           IF ch = "=" THEN GetCh; sym := leq
-           ELSE sym := lss
-           END |
-      "=": sym := eql ; GetCh |
-      ">": GetCh;
-           IF ch = "=" THEN GetCh; sym := geq
-           ELSE sym := gtr
-           END |
-      "?": sym := read; GetCh |
-      "@": sym := null; GetCh |
-      "A" .. "Z": Identifier |
-      "[" .. "`": sym := null; GetCh |
-      "a" .. "z": Identifier |
-      "{" .. "~": sym := null; GetCh
+    CASE ch OF   (* " " <= ch < 177C *)
+        " "  : sym := eof; ch := 0C |
+        "!"  : sym := write; GetCh |
+        '"'  : sym := null; GetCh |
+        "#"  : sym := neq;  GetCh |
+        "$"  : sym := null; GetCh |
+        "%"  : sym := null; GetCh |
+        "&"  : sym := null; GetCh |
+        "'"  : sym := null; GetCh |
+        "("  : GetCh;
+               IF ch = "*" THEN Comment; GetSym
+               ELSE sym := lparen
+               END |
+        ")"  : sym := rparen; GetCh|
+        "*"  : sym := times; GetCh |
+        "+"  : sym := plus; GetCh  |
+        ","  : sym := comma; GetCh |
+        "-"  : sym := minus; GetCh |
+        "."  : sym := period; GetCh |
+        "/"  : sym := div; GetCh |
+        "0".."9": Number |
+        ":"  : GetCh;
+               IF ch = "=" THEN GetCh; sym := becomes
+               ELSE sym := null
+               END |
+        ";"  : sym := semicolon; GetCh |
+        "<"  : GetCh;
+               IF ch = "=" THEN GetCh; sym := leq
+               ELSE sym := lss
+               END |
+        "="  : sym := eql ; GetCh |
+        ">"  : GetCh;
+               IF ch = "=" THEN GetCh; sym := geq
+               ELSE sym := gtr
+               END |
+        "?"  : sym := read; GetCh |
+        "@"  : sym := null; GetCh |
+        "A".."Z": Identifier |
+        "[".."`": sym := null; GetCh |
+        "a".."z": Identifier |
+        "{".."~": sym := null; GetCh
     END
   END GetSym;
 
   PROCEDURE InitScanner;
   BEGIN ch := " ";
     IF id0 = 0 THEN id0 := id
-    ELSE id := id0; Write(win, 14C)
+      ELSE id := id0; Write(win, 14C)
     END
   END InitScanner;
 
@@ -169,7 +169,7 @@ IMPLEMENTATION MODULE PL0Scanner;
     INC(id);
     WHILE l <= L DO
       buf[id] := name[l];
-      id := id + 1; l := l + 1
+      id := id+1; l := l+1
     END
   END EnterKW;
 
@@ -185,5 +185,5 @@ BEGIN K := 0; id := 0; id0 := 0;
   EnterKW(const, "CONST");
   EnterKW(while, "WHILE");
   EnterKW(procedure, "PROCEDURE");
-  OpenTextWindow(win, 0, 574, 704, 354, "PROGRAM")
+  OpenTextWindow(win, 0, 574, 704, 354, "PROGRAM");
 END PL0Scanner.

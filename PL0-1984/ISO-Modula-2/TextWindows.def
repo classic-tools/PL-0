@@ -1,0 +1,15 @@
+DEFINITION MODULE TextWindows;
+  TYPE Window = CARDINAL;
+
+  VAR Done: BOOLEAN;
+
+  PROCEDURE OpenTextWindow(VAR win: Window; x, y, w, h: CARDINAL; name: ARRAY OF CHAR);
+  PROCEDURE ReadInt(win: Window; VAR n: INTEGER);
+  PROCEDURE Write(win: Window; ch: CHAR);
+  PROCEDURE WriteString(win: Window; s: ARRAY OF CHAR);
+  PROCEDURE WriteCard(win: Window; n, w: CARDINAL);
+  PROCEDURE WriteInt(win: Window; n: INTEGER; w: CARDINAL);
+  PROCEDURE WriteLn(win: Window);
+  PROCEDURE Invert(win: Window; on: BOOLEAN);
+  PROCEDURE CloseTextWindow(VAR win: Window);
+END TextWindows.

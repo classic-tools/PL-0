@@ -4,3 +4,4 @@ The **PL/0** language was introduced, along with a Compiler-Interpreter system, 
 |Directory     | Description                                       |
 |--------------|---------------------------------------------------|
 |Book          |**PL/0** Compiler-Interpreter system (1976)        |
+|CDC-Pascal-1.2|CDC Pascal 1.2 **PL/0** Compiler-Interpreter system|

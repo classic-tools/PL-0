@@ -1,0 +1,4 @@
+DEFINITION MODULE Terminal;
+  PROCEDURE Read(VAR ch: CHAR);
+  PROCEDURE BusyRead(VAR ch: CHAR);
+END Terminal.
